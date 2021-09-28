@@ -6,61 +6,35 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       this.hasMany(models.Item, {
-        foreignKey: 'userId'
-      });
-      this.hasMany(models.Art, {
-        foreignKey: 'userId'
+        foreignKey: 'id'
       });
     }
   };
   User.init({
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
     firstName: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING,
       allowNull: false
     },
     lastName: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING,
       allowNull: false
     },
     username: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING,
       allowNull: false
     },
     email: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING,
       allowNull: false
     },
     address: {
-      type: DataTypes.STRING,
-      allowNull: true
+      type: DataTypes.STRING
     },
     phoneNumber: {
-      type: DataTypes.STRING,
-      allowNull: true
+      type: DataTypes.STRING
     },
-    buyerAccount: {
+    admin: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    sellerAccount: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    adminAccount: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    sellerId: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    buyerId: {
-      type: DataTypes.STRING,
       allowNull: false
     },
     password: {

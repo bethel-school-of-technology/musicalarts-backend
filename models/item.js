@@ -9,11 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Item.init({
-    itemId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
     title: {
       type: DataTypes.STRING,
       allowNull: false
@@ -22,29 +17,27 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
-    sellerId: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     price: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
     location: {
-      type: DataTypes.STRING,
-      allowNull: true
+      type: DataTypes.STRING
     },
     genre: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    itemType: {
-      type: DataTypes.STRING,
+    musicType: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    artType: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     },
     imageUrl: {
-      type: DataTypes.STRING,
-      allowNull: true
+      type: DataTypes.STRING
     }
   }, {
     sequelize,
