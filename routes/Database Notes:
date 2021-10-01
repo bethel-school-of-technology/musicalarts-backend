@@ -1,0 +1,48 @@
+Database: 
+
+users table: 
+- id
+- name
+- email
+- ... 
+
+
+inventory table: contains the of all the items in the store.. 
+- id
+- item_name 
+- serial_number: asdfasf23423dasdf (random hash)
+- quantity 
+- price 
+- category: art, music... (enum)
+- ...
+- updated_at
+- created_at
+
+
+orders table: 
+- id
+- user_id
+- order_items: list of purchased items..
+- total price/ or cost 
+- date of purchase 
+- ...
+
+
+order_items table?
+- id
+- user_id
+- order_id 
+- inventory_id
+- quantity
+- anything else you need...
+
+
+row in orders table : 1, 2, 10, 100, 1/1/2022
+order_items: 
+2, 1, 1, ....
+2, 1, 2, ....
+2, 1, 3, ....
+
+
+
+

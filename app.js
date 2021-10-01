@@ -8,7 +8,7 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var itemsRouter = require('./routes/items');
+var inventoryRouter = require('./routes/inventory');
 
 var app = express();
 
@@ -43,6 +43,6 @@ app.use(async (req, res, next) => {
 
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/items', itemsRouter);
+app.use('/inventory', inventoryRouter);
 
 module.exports = app;

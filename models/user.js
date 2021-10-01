@@ -5,9 +5,13 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      this.hasMany(models.Item, {
+      this.hasMany(models.Inventory, {
         foreignKey: 'id'
       });
+      // this.hasMany(models.Order, {
+      //   foreignKey: 'id'
+      // });
+      
     }
   };
   User.init({
@@ -33,8 +37,8 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: {
       type: DataTypes.STRING
     },
-    admin: {
-      type: DataTypes.BOOLEAN,
+    accountType: {
+      type: DataTypes.ENUM('seller', 'buyer', 'admin'),
       allowNull: false
     },
     password: {

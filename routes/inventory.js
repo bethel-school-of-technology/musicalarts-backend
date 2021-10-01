@@ -1,26 +1,26 @@
 var express = require('express');
 var router = express.Router();
-const { Item } = require('../models');
+const { Inventory } = require('../models');
 var auth = require('../services/auth');
 
-/* GET all items */
+/* GET all items in inventory */
 router.get('/', function(req, res, next) {
-  Item.findAll().then(itemList => {
-    res.json(itemList);
+  Inventory.findAll().then(inventoryList => {
+    res.json(inventoryList);
   })
 });
 
 /* GET /:id get an individual item */
 router.get('/:id', (req, res, next) => {
-  const itemId = parseInt(req.params.id);
+  const inventoryId = parseInt(req.params.id);
 
-  Item.findOne({
+  Inventory.findOne({
     where: {
-      id: itemId
+      id: inventoryId
     }
-  }).then(theItem => {
-    if (theItem) {
-      res.json(theItem);
+  }).then(theInventory => {
+    if (theInventory) {
+      res.json(theInventory);
     } else {
       res.status(404).send();
     }
@@ -31,15 +31,6 @@ router.get('/:id', (req, res, next) => {
 
 /* POST create an item */
 router.post('/', async (req, res, next) => {
-  // Get the token from the request
-  // const header = req.headers.authorization;
-
-  // if (!header) {
-  //   res.status(403).send();
-  //   return;
-  // }
-
-  // const token = header.split(' ')[1];
 
   // Validate token / get the user
   const user = req.user;
@@ -49,18 +40,18 @@ router.post('/', async (req, res, next) => {
     return;
   }
   // Create the item with the user id
-  Item.create({
-    title: req.body.title,
+  Inventory.create({
+    itemName: req.body.itemName,
     description: req.body.description,
+    quantity: req.body.quantity,
     price: req.body.price,
     location: req.body.location,
     genre: req.body.genre,
-    musicType: req.body.musicType,
-    artType: req.body.artType,
+    category: req.body.category,
     imageUrl: req.body.imageUrl,
     UserId: user.id
-  }).then(newItem => {
-    res.json(newItem);
+  }).then(newInventory => {
+    res.json(newInventory);
   }).catch(() => {
     res.status(400).send();
   });
@@ -68,9 +59,9 @@ router.post('/', async (req, res, next) => {
 
 /* PUT update a item */
 router.put('/:id', ( req, res, next ) => {
-  const itemId = parseInt(req.params.id);
+  const inventoryId = parseInt(req.params.id);
 
-  if (!itemId || itemId <= 0) {
+  if (!inventoryId || inventoryId <= 0) {
     res.status(400).send('Invalid ID');
     return;
   }
@@ -82,18 +73,18 @@ router.put('/:id', ( req, res, next ) => {
     return;
   }
 
-  Item.update({
-    title: req.body.title,
+  Inventory.update({
+    itemName: req.body.itemName,
     description: req.body.description,
+    quantity: req.body.quantity,
     price: req.body.price,
     location: req.body.location,
     genre: req.body.genre,
-    musicType: req.body.musicType,
-    artType: req.body.artType,
+    category: req.body.category,
     imageUrl: req.body.imageUrl
   }, {
     where: {
-      id: itemId
+      id: inventoryId
     }
   }).then(() => {
     res.status(204).send();
@@ -104,9 +95,9 @@ router.put('/:id', ( req, res, next ) => {
 
 /* DELETE an item */
 router.delete('/:id', ( req, res, next ) => {
-  const itemId = parseInt(req.params.id);
+  const inventoryId = parseInt(req.params.id);
 
-  if (!itemId || itemId <= 0) {
+  if (!inventoryId || inventoryId <= 0) {
     res.status(400).send('Invalid ID');
     return;
   }
@@ -119,9 +110,9 @@ router.delete('/:id', ( req, res, next ) => {
   }  
 
 
-  Item.destroy({
+  Inventory.destroy({
     where: {
-      id: itemId
+      id: inventoryId
     }
   }).then(() => {
     res.status(204).send();
