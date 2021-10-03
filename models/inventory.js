@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   class Inventory extends Model {
     static associate(models) {
       this.belongsTo(models.User);
-      // this.belongsToMany(models.Order, { through: models.ItemsOrdered });
+      // this.hasMany(models.Order);
     }
   };
   Inventory.init({

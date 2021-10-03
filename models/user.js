@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       // this.hasMany(models.Order, {
       //   foreignKey: 'id'
       // });
-      
     }
   };
   User.init({
@@ -39,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     accountType: {
       type: DataTypes.ENUM('seller', 'buyer', 'admin'),
-      allowNull: false
+      allowNull: true
     },
     password: {
       type: DataTypes.STRING,

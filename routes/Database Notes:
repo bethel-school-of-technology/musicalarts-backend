@@ -1,12 +1,15 @@
 Database: 
 
+
+users have many Items (inventory)
+users have many orders
 users table: 
 - id
 - name
 - email
 - ... 
 
-
+items (inventory) have many users
 inventory table: contains the of all the items in the store.. 
 - id
 - item_name 
@@ -18,7 +21,8 @@ inventory table: contains the of all the items in the store..
 - updated_at
 - created_at
 
-
+orders belong to users (one to many)
+orders have many order Items
 orders table: 
 - id
 - user_id
@@ -27,7 +31,7 @@ orders table:
 - date of purchase 
 - ...
 
-
+order items belong to orders (one to many)
 order_items table?
 - id
 - user_id

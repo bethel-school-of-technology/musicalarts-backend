@@ -52,18 +52,12 @@ router.post('/', async (req, res, next) => {
     phoneNumber: req.body.phoneNumber,
     accountType: req.body.accountType,
     password: hashedPassword
-  }).then(newUser => {
-    res.json({
-      id: newUser.id,
-      firstName: newUser.firstName,
-      lastName: newUser.lastName,
-      username: newUser.username,
-      email: newUser.email,
-      address: newUser.address,
-      phoneNumber: newUser.phoneNumber
-    });
-  }).catch(() => {
-    res.status(400).send();
+  })
+    .then(newUser => {
+      res.json(newUser);
+  })
+    .catch(() => {
+      res.status(400).send();
   });
 });
 
