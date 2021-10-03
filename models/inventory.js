@@ -6,8 +6,9 @@ const order = require('./order');
 module.exports = (sequelize, DataTypes) => {
   class Inventory extends Model {
     static associate(models) {
+      // this.belongsToMany(models.User, { through: 'inventory_users' });
+      // this.belongsToMany(models.Order, { through: 'inventory_orders' });
       this.belongsTo(models.User);
-      // this.hasMany(models.Order);
     }
   };
   Inventory.init({

@@ -31,8 +31,8 @@ orders table:
 - date of purchase 
 - ...
 
-order items belong to orders (one to many)
-order_items table?
+<!-- itemsOrdered belong to orders (one to many) -->
+itemsOrdered table?
 - id
 - user_id
 - order_id 

@@ -5,10 +5,11 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
-      // this.belongsTo(models.User);
-      // this.belongsTo(models.Inventory);
-      // this.hasMany(models.ItemsOrdered, {
-      //   foreignKey: 'id'
+      // this.belongsToMany(models.Inventory, { through: 'inventory_orders' });
+      // this.belongsTo(models.Buyer, {
+      //   foreignKey: {
+      //     allowNull: false,
+      //   },
       // });
     }
   };

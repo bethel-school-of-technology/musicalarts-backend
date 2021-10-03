@@ -3,13 +3,12 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Buyer extends Model {
     static associate(models) {
-      // this.belongsToMany(models.Inventory, { through: 'inventory_users' });
-      this.hasMany(models.Inventory);
+      // this.hasMany(models.Order);
     }
   };
-  User.init({
+  Buyer.init({
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -33,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     accountType: {
-      type: DataTypes.ENUM('seller', 'buyer', 'admin'),
+      type: DataTypes.ENUM('buyer'),
       allowNull: true
     },
     password: {
@@ -42,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'Buyer',
   });
-  return User;
+  return Buyer;
 };

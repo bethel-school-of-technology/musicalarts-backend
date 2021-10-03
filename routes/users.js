@@ -50,7 +50,7 @@ router.post('/', async (req, res, next) => {
     email: req.body.email,
     address: req.body.address,
     phoneNumber: req.body.phoneNumber,
-    accountType: req.body.accountType,
+    // accountType: req.body.accountType,
     password: hashedPassword
   })
     .then(newUser => {
