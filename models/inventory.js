@@ -2,19 +2,26 @@
 const {
   Model
 } = require('sequelize');
+const order = require('./order');
 module.exports = (sequelize, DataTypes) => {
-  class Item extends Model {
+  class Inventory extends Model {
     static associate(models) {
+      // this.belongsToMany(models.User, { through: 'inventory_users' });
+      // this.belongsToMany(models.Order, { through: 'inventory_orders' });
       this.belongsTo(models.User);
     }
   };
-  Item.init({
-    title: {
+  Inventory.init({
+    itemName: {
       type: DataTypes.STRING,
       allowNull: false
     },
     description: {
       type: DataTypes.STRING,
+      allowNull: true
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     price: {
@@ -28,12 +35,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
-    musicType: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    artType: {
-      type: DataTypes.BOOLEAN,
+    category: {
+      type: DataTypes.ENUM('music', 'art'),
       allowNull: false
     },
     imageUrl: {
@@ -41,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Item',
+    modelName: 'Inventory',
   });
-  return Item;
+  return Inventory;
 };
