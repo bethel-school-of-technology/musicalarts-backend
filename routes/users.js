@@ -34,10 +34,10 @@ router.get("/:id", (req, res, next) => {
 });
 
 /* POST create a user */
-router.post("/", async (req, res, next) => {
-  console.log(req.body);
 
-  if (!req.body.userName || !req.body.password) {
+
+router.post("/", async (req, res, next) => {
+  if (!req.body.username || !req.body.password) {
     res.status(400).send("Username and Password Required");
     return;
   }
@@ -50,7 +50,7 @@ router.post("/", async (req, res, next) => {
   User.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    username: req.body.userName,
+    username: req.body.username,
     email: req.body.email,
     address: req.body.address,
     phoneNumber: req.body.phoneNumber,
