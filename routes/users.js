@@ -53,7 +53,7 @@ router.post('/', async (req, res, next) => {
     // accountType: req.body.accountType,
     password: hashedPassword
   })
-    .then(newUser => {
+    .then((newUser) => {
       res.json(newUser);
   })
     .catch(() => {
