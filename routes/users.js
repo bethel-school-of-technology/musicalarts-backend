@@ -35,6 +35,7 @@ router.get("/:id", (req, res, next) => {
 
 /* POST create a user */
 
+
 router.post("/", async (req, res, next) => {
   if (!req.body.username || !req.body.password) {
     res.status(400).send("Username and Password Required");
