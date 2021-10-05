@@ -5,7 +5,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
-      this.belongsTo(models.Buyer);
+      this.belongsTo(models.User);
       this.belongsToMany(models.Inventory, { through: models.InventoryOrder });
 
     }
