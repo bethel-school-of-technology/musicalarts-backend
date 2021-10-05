@@ -3,7 +3,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // this.belongsToMany(models.Inventory, { through: 'inventory_users' });
       this.hasMany(models.Inventory);
     }
   }
@@ -32,13 +31,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       accountType: {
-        type: DataTypes.ENUM("seller", "buyer", "admin"),
+        type: DataTypes.ENUM("seller", "admin"),
         allowNull: true,
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
+      }
     },
     {
       sequelize,

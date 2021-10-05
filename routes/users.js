@@ -90,6 +90,12 @@ router.post("/signin", async (req, res, next) => {
   });
 });
 
+// GET SignOut a user */
+// router.get('/signout', function (req, res, next) {
+//   res.cookie('jwt', "", { expires: new Date(0) });
+//   res.redirect('/users/login');
+//   });
+
 /* PUT update a user */
 router.put("/:id", (req, res, next) => {
   const userId = parseInt(req.params.id);
