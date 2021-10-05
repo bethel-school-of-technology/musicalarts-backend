@@ -9,6 +9,8 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var inventoryRouter = require('./routes/inventory');
+var buyersRouter = require('./routes/buyers');
+var ordersRouter = require('./routes/orders');
 
 var app = express();
 
@@ -39,10 +41,15 @@ app.use(async (req, res, next) => {
   req.user = user;
   next();
 
+
 });
 
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/inventory', inventoryRouter);
+app.use('/buyers', buyersRouter);
+app.use('/orders', ordersRouter);
+
+
 
 module.exports = app;

@@ -9,7 +9,7 @@ users table:
 - email
 - ... 
 
-items (inventory) have many users
+<!-- items (inventory) have many users -->
 inventory table: contains the of all the items in the store.. 
 - id
 - item_name 

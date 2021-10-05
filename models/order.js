@@ -5,18 +5,21 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
-      // this.belongsToMany(models.Inventory, { through: 'inventory_orders' });
-      // this.belongsTo(models.Buyer, {
-      //   foreignKey: {
-      //     allowNull: false,
-      //   },
-      // });
+      this.belongsTo(models.Buyer);
+      this.belongsToMany(models.Inventory, { through: models.InventoryOrder });
+
     }
   };
   Order.init({
-    itemsOrdered: DataTypes.STRING,
-    totalPrice: DataTypes.INTEGER,
-    purchaseDate: DataTypes.STRING
+    itemsOrdered: {
+      type: DataTypes.STRING
+    },
+    totalPrice: {
+      type: DataTypes.INTEGER
+    },
+    purchaseDate: {
+      type: DataTypes.STRING
+    }
   }, {
     sequelize,
     modelName: 'Order',

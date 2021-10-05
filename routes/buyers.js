@@ -1,28 +1,28 @@
 var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcrypt");
-const { User } = require("../models");
+const { Buyer } = require("../models");
 var auth = require("../services/auth");
 
-/* GET all users */
+/* GET all buyers */
 router.get("/", function (req, res, next) {
-  User.findAll().then((userList) => {
-    res.json(userList);
+  Buyer.findAll().then((buyerList) => {
+    res.json(buyerList);
   });
 });
 
-/* GET /:id get an individual user */
+/* GET /:id get an individual buyer */
 router.get("/:id", (req, res, next) => {
-  const userId = parseInt(req.params.id);
+  const buyerId = parseInt(req.params.id);
 
-  User.findOne({
+  Buyer.findOne({
     where: {
-      id: userId,
+      id:  buyerId,
     },
   }).then(
-    (theUser) => {
-      if (theUser) {
-        res.json(theUser);
+    (theBuyer) => {
+      if (theBuyer) {
+        res.json(theBuyer);
       } else {
         res.status(404).send();
       }
@@ -33,7 +33,7 @@ router.get("/:id", (req, res, next) => {
   );
 });
 
-/* POST create a user */
+/* POST create a buyer */
 
 
 router.post("/", async (req, res, next) => {
@@ -47,7 +47,7 @@ router.post("/", async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-  User.create({
+  Buyer.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     username: req.body.username,
@@ -57,32 +57,32 @@ router.post("/", async (req, res, next) => {
     // accountType: req.body.accountType,
     password: hashedPassword,
   })
-    .then((newUser) => {
-      res.json(newUser);
+    .then((newBuyer) => {
+      res.json(newBuyer);
     })
     .catch(() => {
       res.status(400).send();
     });
 });
 
-// POST SignIn a user */
+// POST SignIn a buyer */
 router.post("/signin", async (req, res, next) => {
-  User.findOne({
+  Buyer.findOne({
     where: {
       username: req.body.username,
     },
-  }).then(async (user) => {
-    //check if user exists
-    if (!user) {
+  }).then(async (buyer) => {
+    //check if buyer exists
+    if (!buyer) {
       res.status(404).send("Invalid username");
       return;
     }
     //check the password
-    const valid = await bcrypt.compare(req.body.password, user.password);
+    const valid = await bcrypt.compare(req.body.password, buyer.password);
 
     if (valid) {
       //create the token
-      const jwt = auth.createJWT(user);
+      const jwt = auth.createJWT(buyer);
       res.status(200).send({ jwt });
     } else {
       res.status(401).send("Invalid password");
@@ -90,22 +90,22 @@ router.post("/signin", async (req, res, next) => {
   });
 });
 
-// GET SignOut a user */
+// GET SignOut a buyer */
 // router.get('/signout', function (req, res, next) {
 //   res.cookie('jwt', "", { expires: new Date(0) });
 //   res.redirect('/users/login');
 //   });
 
-/* PUT update a user */
+/* PUT update a buyer */
 router.put("/:id", (req, res, next) => {
-  const userId = parseInt(req.params.id);
+  const buyerId = parseInt(req.params.id);
 
-  if (!userId || userId <= 0) {
+  if (!buyerId || buyerId <= 0) {
     res.status(400).send("Invalid ID");
     return;
   }
 
-  User.update(
+  Buyer.update(
     {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -118,7 +118,7 @@ router.put("/:id", (req, res, next) => {
     },
     {
       where: {
-        id: userId,
+        id: buyerId,
       },
     }
   )
@@ -130,18 +130,18 @@ router.put("/:id", (req, res, next) => {
     });
 });
 
-/* DELETE a user */
+/* DELETE a buyer */
 router.delete("/:id", (req, res, next) => {
-  const userId = parseInt(req.params.id);
+  const buyerId = parseInt(req.params.id);
 
-  if (!userId || userId <= 0) {
+  if (!buyerId || buyerId <= 0) {
     res.status(400).send("Invalid ID");
     return;
   }
 
-  User.destroy({
+  Buyer.destroy({
     where: {
-      id: userId,
+      id: buyerId,
     },
   })
     .then(() => {
