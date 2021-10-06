@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   ShippingInfo.init({
-    firstname: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    lastname: {
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false
     },
