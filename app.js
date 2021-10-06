@@ -11,6 +11,7 @@ var usersRouter = require("./routes/users");
 var inventoryRouter = require("./routes/inventory");
 var ordersRouter = require("./routes/orders");
 var shippinginfosRouter = require("./routes/shippinginfos");
+var paymentmethodsRouter = require("./routes/paymentmethods");
 
 var app = express();
 
@@ -47,5 +48,6 @@ app.use("/users", usersRouter);
 app.use("/inventory", inventoryRouter);
 app.use("/orders", ordersRouter);
 app.use("/shippinginfos", shippinginfosRouter);
+app.use("/paymentmethods", paymentmethodsRouter);
 
 module.exports = app;
