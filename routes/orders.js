@@ -39,12 +39,13 @@ router.post('/', async (req, res, next) => {
     res.status(403).send();
     return;
   }
+
   // Create the item with the user id
   Order.create({
     itemsOrdered: req.body.itemsOrdered,
     totalPrice: req.body.totalPrice,
     purchaseDate: req.body.purchaseDate,
-    buyerId: req.body.buyerId
+    UserId: user.id
   }).then(newOrder => {
     res.json(newOrder);
   }).catch(() => {
@@ -71,8 +72,7 @@ router.put('/:id', ( req, res, next ) => {
   Order.update({
     itemsOrdered: req.body.itemsOrdered,
     totalPrice: req.body.totalPrice,
-    purchaseDate: req.body.purchaseDate,
-    buyerId: req.body.buyerId
+    purchaseDate: req.body.purchaseDate
   }, {
     where: {
       id: orderId
@@ -99,7 +99,6 @@ router.delete('/:id', ( req, res, next ) => {
     res.status(403).send();
     return;
   }  
-
 
   Order.destroy({
     where: {

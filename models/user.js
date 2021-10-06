@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       this.hasMany(models.Inventory);
+      this.hasMany(models.Order);
     }
   }
   User.init(
@@ -30,9 +31,12 @@ module.exports = (sequelize, DataTypes) => {
       phoneNumber: {
         type: DataTypes.STRING,
       },
-      accountType: {
-        type: DataTypes.ENUM("seller", "admin"),
-        allowNull: true,
+      // accountType: {
+      //   type: DataTypes.ENUM("seller", "buyer"),
+      //   allowNull: true,
+      // },
+      admin: {
+        type: DataTypes.BOOLEAN
       },
       password: {
         type: DataTypes.STRING,

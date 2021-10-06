@@ -19,6 +19,9 @@ router.get("/:id", (req, res, next) => {
     where: {
       id: userId,
     },
+    // include: [{
+    //   model: models.buyer
+    // }]
   }).then(
     (theUser) => {
       if (theUser) {
@@ -34,8 +37,6 @@ router.get("/:id", (req, res, next) => {
 });
 
 /* POST create a user */
-
-
 router.post("/", async (req, res, next) => {
   if (!req.body.username || !req.body.password) {
     res.status(400).send("Username and Password Required");
@@ -91,10 +92,11 @@ router.post("/signin", async (req, res, next) => {
 });
 
 // GET SignOut a user */
-// router.get('/signout', function (req, res, next) {
-//   res.cookie('jwt', "", { expires: new Date(0) });
-//   res.redirect('/users/login');
-//   });
+router.get('/signout', function (req, res, next) {
+  res.cookie('jwt', "", { expires: new Date(0) });
+  // res.send('/users/signin');
+  res.send('Logout Successful')
+  });
 
 /* PUT update a user */
 router.put("/:id", (req, res, next) => {
