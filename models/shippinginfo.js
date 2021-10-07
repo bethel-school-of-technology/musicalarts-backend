@@ -49,3 +49,5 @@ module.exports = (sequelize, DataTypes) => {
   );
   return ShippingInfo;
 };
+
+// I hope this works! :)
