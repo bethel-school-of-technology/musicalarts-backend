@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.User);
       this.belongsToMany(models.Inventory, { through: models.InventoryOrder });
+      this.hasOne(models.ShippingInfo);
+      this.hasOne(models.PaymentMethod);
 
     }
   };

@@ -10,6 +10,29 @@ router.get('/', function(req, res, next) {
   })
 });
 
+/* GET Single User's items - Alexa's additions */
+router.get('/user-listing', function (req, res, next) {
+  const user = req.user;
+  if (!user) {
+    res.status(403).send();
+    return;
+  }
+  Inventory.findAll({
+    where: { UserId: user.id },
+  }).then(
+    (userListings) => {
+      if (userListings) {
+        res.json(userListings);
+      } else {
+        res.status(404).send();
+      }
+    },
+    (err) => {
+      res.status(500).send(err);
+    }
+  );
+});
+
 /* GET /:id get an individual item */
 router.get('/:id', (req, res, next) => {
   const inventoryId = parseInt(req.params.id);
