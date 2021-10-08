@@ -7,7 +7,7 @@ var auth = require("./services/auth");
 var cors = require("cors");
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var userRouter = require("./routes/user");
 var inventoryRouter = require("./routes/inventory");
 var ordersRouter = require("./routes/orders");
 var shippinginfosRouter = require("./routes/shippinginfos");
@@ -44,7 +44,7 @@ app.use(async (req, res, next) => {
 });
 
 // app.use('/', indexRouter);
-app.use("/users", usersRouter);
+app.use("/user", userRouter);
 app.use("/inventory", inventoryRouter);
 app.use("/orders", ordersRouter);
 app.use("/shippinginfos", shippinginfosRouter);
