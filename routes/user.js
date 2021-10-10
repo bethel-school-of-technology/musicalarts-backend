@@ -4,7 +4,6 @@ var bcrypt = require("bcrypt");
 const { User } = require("../models");
 var auth = require("../services/auth");
 
-
 // POST SignIn a user */
 router.post("/signin", async (req, res, next) => {
   User.findOne({
@@ -31,18 +30,46 @@ router.post("/signin", async (req, res, next) => {
 });
 
 // GET SignOut a user */
-router.get('/signout', function (req, res, next) {
-  res.cookie('jwt', "", { expires: new Date(0) });
+router.get("/signout", function (req, res, next) {
+  res.cookie("jwt", "", { expires: new Date(0) });
   // res.send('/users/signin');
-  res.send('Logout Successful')
-  });
-
+  res.send("Logout Successful");
+});
 
 /* GET all users */
 router.get("/", function (req, res, next) {
   User.findAll().then((userList) => {
     res.json(userList);
   });
+});
+
+/* GET Dashboard Function -- Alexa's additions  */
+router.get("/dashboard", function (req, res) {
+  const user = req.user;
+  if (!user) {
+    res.status(403).send();
+    return;
+  }
+  User.findOne({
+    where: { username: user.username },
+    //include: [
+    //{
+    //model: Inventory,
+    //required: false,
+    //},
+    //],
+  }).then(
+    (userInfo) => {
+      if (userInfo) {
+        res.json({ userInfo });
+      } else {
+        res.status(404).send();
+      }
+    },
+    (err) => {
+      res.status(500).send(err);
+    }
+  );
 });
 
 /* GET /:id get an individual user */
@@ -100,7 +127,6 @@ router.post("/", async (req, res, next) => {
     });
 });
 
-
 /* PUT update a user */
 router.put("/:id", (req, res, next) => {
   const userId = parseInt(req.params.id);
@@ -156,36 +182,5 @@ router.delete("/:id", (req, res, next) => {
       res.status(400).send();
     });
 });
-
-
-/* GET Dashboard Function -- Alexa's additions  */
-router.get('/dashboard', function (req, res) {
-  const user = req.user;
-  if (!user) {
-    res.status(403).send();
-    return;
-  }
-  User.findOne({
-    where: { username: user.username },
-    include: [
-      {
-        model: Inventory,
-        required: false,
-      },
-    ],
-  }).then(
-    (userInfo) => {
-      if (userInfo) {
-        res.json({ userInfo });
-      } else {
-        res.status(404).send();
-      }
-    },
-    (err) => {
-      res.status(500).send(err);
-    }
-  );
-});
-
 
 module.exports = router;
