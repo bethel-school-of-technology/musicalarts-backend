@@ -4,14 +4,15 @@ const {
 } = require('sequelize');
 const order = require('./order');
 module.exports = (sequelize, DataTypes) => {
-  class Inventory extends Model {
+  class Product extends Model {
     static associate(models) {
       this.belongsTo(models.User);
-      this.belongsToMany(models.Order, { through: models.InventoryOrder });
+      this.belongsToMany(models.Order, { through: models.ProductOrder });
+      this.belongsToMany(models.Cart, { through: models.CartItem});
     }
   };
-  Inventory.init({
-    itemName: {
+  Product.init({
+    productName: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -43,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Inventory',
+    modelName: 'Product',
   });
-  return Inventory;
+  return Product;
 };
