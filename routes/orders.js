@@ -3,6 +3,31 @@ var router = express.Router();
 const { Order } = require('../models');
 var auth = require('../services/auth');
 
+
+/* POST create an order */
+router.post('/', async (req, res, next) => {
+
+  // Validate token / get the user
+  const user = req.user;
+
+  if (!user) {
+    res.status(403).send();
+    return;
+  }
+
+  // Create the order with the user id
+  Order.create({
+    productsOrdered: req.body.productsOrdered,
+    totalPrice: req.body.totalPrice,
+    purchaseDate: req.body.purchaseDate,
+    UserId: user.id
+  }).then(newOrder => {
+    res.json(newOrder);
+  }).catch(() => {
+    res.status(400).send();
+  });
+});
+
 /* GET all orders */
 router.get('/', function(req, res, next) {
   Order.findAll().then(ordersList => {
@@ -29,30 +54,6 @@ router.get('/:id', (req, res, next) => {
   })
 });
 
-/* POST create an order */
-router.post('/', async (req, res, next) => {
-
-  // Validate token / get the user
-  const user = req.user;
-
-  if (!user) {
-    res.status(403).send();
-    return;
-  }
-
-  // Create the item with the user id
-  Order.create({
-    itemsOrdered: req.body.itemsOrdered,
-    totalPrice: req.body.totalPrice,
-    purchaseDate: req.body.purchaseDate,
-    UserId: user.id
-  }).then(newOrder => {
-    res.json(newOrder);
-  }).catch(() => {
-    res.status(400).send();
-  });
-});
-
 /* PUT update an order */
 router.put('/:id', ( req, res, next ) => {
   const orderId = parseInt(req.params.id);
@@ -70,7 +71,7 @@ router.put('/:id', ( req, res, next ) => {
   }
 
   Order.update({
-    itemsOrdered: req.body.itemsOrdered,
+    productsOrdered: req.body.productsOrdered,
     totalPrice: req.body.totalPrice,
     purchaseDate: req.body.purchaseDate
   }, {
@@ -110,6 +111,7 @@ router.delete('/:id', ( req, res, next ) => {
     res.status(400).send();
   })
 });
+
 
 
 module.exports = router;

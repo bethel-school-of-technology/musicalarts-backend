@@ -54,7 +54,7 @@ router.get("/dashboard", function (req, res) {
     where: { username: user.username },
     //include: [
     //{
-    //model: Inventory,
+    //model: Product,
     //required: false,
     //},
     //],
@@ -116,7 +116,6 @@ router.post("/", async (req, res, next) => {
     email: req.body.email,
     address: req.body.address,
     phoneNumber: req.body.phoneNumber,
-    // accountType: req.body.accountType,
     password: hashedPassword,
   })
     .then((newUser) => {
@@ -144,7 +143,6 @@ router.put("/:id", (req, res, next) => {
       email: req.body.email,
       address: req.body.address,
       phoneNumber: req.body.phoneNumber,
-      accountType: req.body.accountType,
       password: req.body.password,
     },
     {
