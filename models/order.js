@@ -6,19 +6,65 @@ module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
 
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'userId' });
-      // this.belongsToMany(models.Product, { through: models.ProductsOrdered, foreignKey: 'orderId' });
+      this.belongsTo(models.User);
       this.hasMany(models.ProductOrdered);
-      this.hasOne(models.ShippingInfo);
-      this.hasOne(models.PaymentMethod);
-
     }
   };
   Order.init({
 
     totalPrice: {
-      type: DataTypes.DECIMAL(10, 2)
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
+    },
+    buyerFirstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    buyerLastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    buyerEmail: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    buyerPhoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    streetAddress: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    zipcode: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    nameOnCard: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    cardNumber: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    cardExpirationDate: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    cardCvv: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
+
   }, {
     sequelize,
     modelName: 'Order',
