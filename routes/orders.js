@@ -1,7 +1,7 @@
 var express = require('express');
 // const { ARRAY } = require('sequelize/types');
 var router = express.Router();
-const { Order, Product, ProductOrdered, ShippingInfo, PaymentMethod, Sequelize } = require('../models');
+const { Order, Product, ProductOrdered, Sequelize } = require('../models');
 var auth = require('../services/auth');
 
 
@@ -9,17 +9,30 @@ var auth = require('../services/auth');
 
 router.post('/checkout', async (req, res, next) => {
 
-  const { userId, productsOrdered, totalPrice, shippingInfo, paymentMethod } = req.body;
-
-  // var orderArrays = [productsOrdered, shippingInfo, paymentMethod];
+  const {
+    userId,
+    productsOrdered,
+    totalPrice,
+    buyerFirstName,
+    buyerLastName,
+    buyerEmail,
+    buyerPhoneNumber,
+    streetAddress,
+    city,
+    state,
+    zipcode,
+    nameOnCard,
+    cardNumber,
+    cardExpirationDate,
+    cardCvv } = req.body;
 
   // Validate token / get the user
-  // const user = req.user;
+  const user = req.user;
 
-  // if (!user) {
-  //   res.status(403).send();
-  //   return;
-  // }
+  if (!user) {
+    res.status(403).send();
+    return;
+  }
 
   if (!productsOrdered || !Array.isArray(req.body.productsOrdered)) {
     res.status(400).send({ message: 'No Products Ordered' });
@@ -37,7 +50,19 @@ router.post('/checkout', async (req, res, next) => {
 
     Order.create({
       totalPrice: totalPrice,
-      // userId: req.body.user.id
+      buyerFirstName: buyerFirstName,
+      buyerLastName: buyerLastName,
+      buyerEmail: buyerEmail,
+      buyerPhoneNumber: buyerPhoneNumber,
+      streetAddress: streetAddress,
+      city: city,
+      state: state,
+      zipcode: zipcode,
+      nameOnCard: nameOnCard,
+      cardNumber: cardNumber,
+      cardExpirationDate: cardExpirationDate,
+      cardCvv: cardCvv,
+      UserId: user.id
     }).then(newOrder => {
       // newOrders.push(newOrder);
       res.json(newOrder);
@@ -53,8 +78,7 @@ router.post('/checkout', async (req, res, next) => {
       productId: product.productId,
       productName: product.productName,
       quantity: product.quantity,
-      price: product.price,
-      // userId: req.body.user.id
+      price: product.price
     }).then(newProductOrdered => {
       // newProductsOrdered.push(newProductOrdered);
       res.json(newProductOrdered);
@@ -77,41 +101,6 @@ router.post('/checkout', async (req, res, next) => {
     return total + product.price;
   }, 0);
   console.log("TOTAL: ", totalCost);
-
-  // Create instance for ShippingInfo
-  shippingInfo.map(function (shipping) {
-    ShippingInfo.create({
-      firstName: shipping.firstName,
-      lastName: shipping.lastName,
-      email: shipping.email,
-      address: shipping.address,
-      city: shipping.city,
-      state: shipping.state,
-      zipCode: shipping.zipCode,
-    })
-      .then((newShippingInfo) => {
-        res.json(newShippingInfo);
-      })
-      .catch(() => {
-        res.status(400).send();
-      });
-  });
-
-  // Create instance for PaymentMethod
-  paymentMethod.map(function (payment) {
-    PaymentMethod.create({
-      cardNumber: payment.cardNumber,
-      expirationDate: payment.expirationDate,
-      cvv: payment.cvv,
-      phoneNumber: payment.phoneNumber,
-    })
-      .then((newPaymentMethod) => {
-        res.json(newPaymentMethod);
-      })
-      .catch(() => {
-        res.status(400).send();
-      });
-  });
 
 });
 

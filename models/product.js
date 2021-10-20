@@ -4,8 +4,7 @@ const order = require('./order');
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'userId' });
-      // this.belongsToMany(models.Order, { through: models.ProductsOrdered, foreignKey: 'productId' });
+      this.belongsTo(models.User);
     }
   };
   Product.init({
