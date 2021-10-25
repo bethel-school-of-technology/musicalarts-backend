@@ -22,15 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   ProductOrdered.init({
-    // orderId: {
-    //   type: DataTypes.INTEGER
-    // },
     productId: {
       type: DataTypes.INTEGER
-      // references: {
-      //   model: 'Products',
-      //   key: 'id'
-      // }
     },
     productName: {
       type: DataTypes.STRING
@@ -39,10 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2)
     },
     quantity: {
-      type: DataTypes.INTEGER,
-      validate: {
-
-      }
+      type: DataTypes.INTEGER
+    },
+    userId: {
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
