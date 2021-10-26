@@ -97,11 +97,12 @@ router.post('/checkout', async (req, res, next) => {
     productsOrdered.forEach(function (product) {
 
       ProductOrdered.create({
-        productId: product.productId,
+        ProductId: product.productId,
         productName: product.productName,
         quantity: product.quantity,
         price: product.price,
-        OrderId: newOrder.id
+        OrderId: newOrder.id,
+        UserId: user.id
       }).then(newProductOrdered => {
         // newProductsOrdered.push(newProductOrdered);
         // res.json(newProductOrdered);
@@ -126,7 +127,7 @@ router.post('/checkout', async (req, res, next) => {
 
   // Need to calculate totalPrice somewhere
   const totalCost = productsOrdered.reduce((total, product) => {
-    return total + product.price;
+    return total + product.price * product.quantity;
   }, 0);
   console.log("TOTAL: ", totalCost);
 });

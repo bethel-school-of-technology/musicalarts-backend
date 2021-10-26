@@ -15,23 +15,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.Order);
-      this.hasOne(models.Product, {
-        foreignKey: 'id',
-        localKey: 'productId'
-      });
+      this.belongsTo(models.Product);
+      this.belongsTo(models.User);
     }
   };
   ProductOrdered.init({
-    // orderId: {
-    //   type: DataTypes.INTEGER
-    // },
-    productId: {
-      type: DataTypes.INTEGER
-      // references: {
-      //   model: 'Products',
-      //   key: 'id'
-      // }
-    },
     productName: {
       type: DataTypes.STRING
     },
