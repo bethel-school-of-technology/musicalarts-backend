@@ -108,7 +108,7 @@ router.post('/checkout', async (req, res, next) => {
     productsOrdered.forEach(function (product) {
 
       ProductOrdered.create({
-        productId: product.productId,
+        ProductId: product.productId,
         productName: product.productName,
         quantity: product.quantity,
         price: product.price,
