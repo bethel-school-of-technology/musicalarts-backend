@@ -7,64 +7,9 @@ var auth = require('../services/auth');
 
 /* POST create an order */
 
-
-// const validate = async (productsOrdered) => {
-//   let productIds = productsOrdered.map(a => a.productId);
-//   let productPrices = productsOrdered.map(p => p.price);
-//   let productQuantities = productsOrdered.map(q => q.quantity);
-
-//   let validated = true;
-
-
-//   Product.findAll({
-//     where: {
-//       id: { [Op.in]: productIds },
-//       price: { [Op.in]: productPrices }
-//     }
-//   }).then(function (result) {
-//     const productDbInfo = result;
-
-//     let productIdCheck = productDbInfo.map(b => b.id);
-//     let productPriceCheck = productDbInfo.map(c => {
-//       return parseInt(c.price)
-//     });
-//     let productQuantityCheck = productDbInfo.map(q => q.quantity);
-//     console.log(productQuantityCheck);
-//     console.log('Amount of items verified in DB: ' + productIdCheck.length);
-//     console.log('Amount of items ordered: ' + productIds.length);
-//     console.log(productPriceCheck);
-//     console.log(productPrices);
-
-//     if (productIds.length !== productIdCheck.length) {
-//       res.status(400).send({ message: 'Something went wrong' });
-//       validated = false;
-//       return validated;
-//     }
-
-//     for (var i = 0; i < productPriceCheck.length; i++) {
-//       if (productPriceCheck[i] !== productPrices[i]) {
-//         res.status(400).send({ message: 'Something is not right' });
-//         validated = false;
-//         return validated;
-//       }
-//     }
-
-//     for (var i = 0; i < productQuantityCheck.length; i++) {
-//       if (productQuantityCheck[i] < productQuantities[i]) {
-//         res.status(400).send({ message: 'Not enough stock of product' });
-//         validated = false;
-//         return validated;
-//       }
-//     }
-
-//   });
-// }
-
-
 router.post('/checkout', async (req, res, next) => {
 
   const {
-    userId,
     productsOrdered,
     totalPrice,
     buyerFirstName,
@@ -142,11 +87,6 @@ router.post('/checkout', async (req, res, next) => {
   // if price ordered == to price found in db -> continue 
   // if quantity ordered is <= than the one found in db -> continue
   // else cancel order and exit
-  // const validatedResult = await validate(productsOrdered);
-
-  // if (validatedResult) {
-  //   // create order
-  // } return validate();
 
   Order.create({
     totalPrice: totalPrice,
@@ -173,7 +113,7 @@ router.post('/checkout', async (req, res, next) => {
         quantity: product.quantity,
         price: product.price,
         OrderId: newOrder.id,
-        userId: userId
+        UserId: user.id
       }).then(newProductOrdered => {
       }).catch(() => {
         res.status(400).send();
@@ -192,13 +132,10 @@ router.post('/checkout', async (req, res, next) => {
   });
 
   // Need to calculate totalPrice somewhere
-  // const totalCost = productsOrdered.reduce((total, product) => {
-  //   return total + product.price;
-  // }, 0);
-  // console.log("TOTAL: ", totalCost);
-  // else {
-  //   res.status(400).send({ message: 'Order Invalid' });
-  // }
+  const totalCost = productsOrdered.reduce((total, product) => {
+    return total + product.price * product.quantity;
+  }, 0);
+  console.log("TOTAL: ", totalCost);
 
 });
 
