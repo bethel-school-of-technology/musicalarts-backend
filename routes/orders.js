@@ -1,5 +1,4 @@
 var express = require('express');
-// const { ARRAY } = require('sequelize/types');
 var router = express.Router();
 const { Order, Product, ProductOrdered, Sequelize } = require('../models');
 const Op = Sequelize.Op;
@@ -35,6 +34,7 @@ router.post('/checkout', async (req, res, next) => {
   }
   if (!productsOrdered || !Array.isArray(req.body.productsOrdered)) {
     res.status(400).send({ message: 'No Products Ordered' });
+    return;
   }
 
   let productIds = productsOrdered.map(a => a.productId);
@@ -66,6 +66,7 @@ router.post('/checkout', async (req, res, next) => {
 
   console.log(productIds);
 
+
   Order.create({
     totalPrice: totalPrice,
     buyerFirstName: buyerFirstName,
@@ -96,15 +97,12 @@ router.post('/checkout', async (req, res, next) => {
       }).catch(() => {
         res.status(400).send();
       });
-
       // Update Product quantity
       Product.update({
         quantity: Sequelize.literal(`quantity - ${product.quantity}`)
       }, {
         where: { id: product.productId }
       });
-
-
     });
     // newOrders.push(newOrder);
     res.json(newOrder);
@@ -112,11 +110,12 @@ router.post('/checkout', async (req, res, next) => {
     res.status(400).send();
   });
 
-  // Need to calculate totalPrice somewhere
+  // Calculate totalPrice somewhere
   const totalCost = productsOrdered.reduce((total, product) => {
     return total + product.price * product.quantity;
   }, 0);
   console.log("TOTAL: ", totalCost);
+
 });
 
 /* GET all orders */
