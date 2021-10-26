@@ -39,9 +39,6 @@ router.post('/checkout', async (req, res, next) => {
 
   let productIds = productsOrdered.map(a => a.productId);
   let productPrices = productsOrdered.map(p => p.price);
-  let productQuantities = productsOrdered.map(q => q.quantity);
-
-
 
   Product.findAll({
     where: {
@@ -49,44 +46,26 @@ router.post('/checkout', async (req, res, next) => {
       price: { [Op.in]: productPrices }
     }
   }).then(function (result) {
-    const productDbInfo = result;
+    const productDbIds = result;
 
-    let productIdCheck = productDbInfo.map(b => b.id);
-    let productPriceCheck = productDbInfo.map(c => {
+    let productIdCheck = productDbIds.map(b => b.id);
+    let productPriceCheck = productDbIds.map(c => {
       return parseInt(c.price)
     });
-    let productQuantityCheck = productDbInfo.map(q => q.quantity);
-    console.log(productQuantityCheck);
     console.log('Amount of items verified in DB: ' + productIdCheck.length);
     console.log('Amount of items ordered: ' + productIds.length);
     console.log(productPriceCheck);
     console.log(productPrices);
 
     if (productIds.length !== productIdCheck.length) {
-      res.status(400).send({ message: 'Something went wrong' });
+      res.status(400).send({ message: 'Something is not right' });
       return;
     }
 
-    for (var i = 0; i < productPriceCheck.length; i++) {
-      if (productPriceCheck[i] !== productPrices[i]) {
-        res.status(400).send({ message: 'Something is not right' });
-        return;
-      }
-    }
-
-    for (var i = 0; i < productQuantityCheck.length; i++) {
-      if (productQuantityCheck[i] < productQuantities[i]) {
-        res.status(400).send({ message: 'Not enough stock of product' });
-        return;
-      }
-    }
   });
-  // you loop 
-  // check quantity and price
-  // forloop where i<= product count
-  // if price ordered == to price found in db -> continue 
-  // if quantity ordered is <= than the one found in db -> continue
-  // else cancel order and exit
+
+  console.log(productIds);
+
 
   Order.create({
     totalPrice: totalPrice,
@@ -131,7 +110,7 @@ router.post('/checkout', async (req, res, next) => {
     res.status(400).send();
   });
 
-  // Need to calculate totalPrice somewhere
+  // Calculate totalPrice somewhere
   const totalCost = productsOrdered.reduce((total, product) => {
     return total + product.price * product.quantity;
   }, 0);
@@ -187,9 +166,19 @@ router.put('/:id', (req, res, next) => {
   }
 
   Order.update({
-    // productsOrdered: req.body.productsOrdered,
-    totalPrice: req.body.totalPrice
-    // purchaseDate: req.body.purchaseDate
+    totalPrice: req.body.totalPrice,
+    buyerFirstName: req.body.buyerFirstName,
+    buyerLastName: req.body.buyerLastName,
+    buyerEmail: req.body.buyerEmail,
+    buyerPhoneNumber: req.body.buyerPhoneNumber,
+    streetAddress: req.body.streetAddress,
+    city: req.body.city,
+    state: req.body.state,
+    zipcode: req.body.zipcode,
+    nameOnCard: req.body.nameOnCard,
+    cardNumber: req.body.cardNumber,
+    cardExpirationDate: req.body.cardExpirationDate,
+    cardCvv: req.body.cardCvv
   }, {
     where: {
       id: orderId
