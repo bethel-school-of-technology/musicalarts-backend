@@ -11,7 +11,6 @@ var auth = require('../services/auth');
 router.post('/checkout', async (req, res, next) => {
 
   const {
-    userId,
     productsOrdered,
     totalPrice,
     buyerFirstName,
@@ -39,43 +38,33 @@ router.post('/checkout', async (req, res, next) => {
   }
 
   let productIds = productsOrdered.map(a => a.productId);
+  let productPrices = productsOrdered.map(p => p.price);
 
   Product.findAll({
     where: {
-      id: {
-        [Op.in]: productIds
-      }
+      id: { [Op.in]: productIds },
+      price: { [Op.in]: productPrices }
     }
   }).then(function (result) {
     const productDbIds = result;
-    let productCheck = productDbIds.map(b => b.id);
-    console.log('Amount of items verified in DB: ' + productCheck.length);
-    console.log('Amount of items ordered: ' + productIds.length);
 
-    if (productIds.length !== productCheck.length) {
-      res.status(400).send({ message: 'Something went wrong' });
+    let productIdCheck = productDbIds.map(b => b.id);
+    let productPriceCheck = productDbIds.map(c => {
+      return parseInt(c.price)
+    });
+    console.log('Amount of items verified in DB: ' + productIdCheck.length);
+    console.log('Amount of items ordered: ' + productIds.length);
+    console.log(productPriceCheck);
+    console.log(productPrices);
+
+    if (productIds.length !== productIdCheck.length) {
+      res.status(400).send({ message: 'Something is not right' });
+      return;
     }
+
   });
 
-  // Loop
-
-  // count the products, check if number or products ordered is equal to number of 
-  // products found in db
-  // if not equal, return some message. 
-
-  // you loop 
-
-  // check quantity and price
-  // forloop where i<= product count
-  // if price ordered == to price found in db -> continue 
-  // if quantity ordered is <= than the one found in db -> continue
-  // else cancel order and exit 
-
   console.log(productIds);
-
-  let newOrders = [];
-  let newProductsOrdered = [];
-  let total = 0;
 
   Order.create({
     totalPrice: totalPrice,
@@ -104,8 +93,6 @@ router.post('/checkout', async (req, res, next) => {
         OrderId: newOrder.id,
         UserId: user.id
       }).then(newProductOrdered => {
-        // newProductsOrdered.push(newProductOrdered);
-        // res.json(newProductOrdered);
       }).catch(() => {
         res.status(400).send();
       });
@@ -180,9 +167,19 @@ router.put('/:id', (req, res, next) => {
   }
 
   Order.update({
-    // productsOrdered: req.body.productsOrdered,
-    totalPrice: req.body.totalPrice
-    // purchaseDate: req.body.purchaseDate
+    totalPrice: req.body.totalPrice,
+    buyerFirstName: req.body.buyerFirstName,
+    buyerLastName: req.body.buyerLastName,
+    buyerEmail: req.body.buyerEmail,
+    buyerPhoneNumber: req.body.buyerPhoneNumber,
+    streetAddress: req.body.streetAddress,
+    city: req.body.city,
+    state: req.body.state,
+    zipcode: req.body.zipcode,
+    nameOnCard: req.body.nameOnCard,
+    cardNumber: req.body.cardNumber,
+    cardExpirationDate: req.body.cardExpirationDate,
+    cardCvv: req.body.cardCvv
   }, {
     where: {
       id: orderId
