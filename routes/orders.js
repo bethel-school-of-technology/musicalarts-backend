@@ -1,5 +1,4 @@
 var express = require('express');
-// const { ARRAY } = require('sequelize/types');
 var router = express.Router();
 const { Order, Product, ProductOrdered, Sequelize } = require('../models');
 const Op = Sequelize.Op;
@@ -11,7 +10,6 @@ var auth = require('../services/auth');
 router.post('/checkout', async (req, res, next) => {
 
   const {
-    userId,
     productsOrdered,
     totalPrice,
     buyerFirstName,
@@ -36,46 +34,59 @@ router.post('/checkout', async (req, res, next) => {
   }
   if (!productsOrdered || !Array.isArray(req.body.productsOrdered)) {
     res.status(400).send({ message: 'No Products Ordered' });
+    return;
   }
 
   let productIds = productsOrdered.map(a => a.productId);
+  let productPrices = productsOrdered.map(p => p.price);
+  let productQuantities = productsOrdered.map(q => q.quantity);
+
+
 
   Product.findAll({
     where: {
-      id: {
-        [Op.in]: productIds
-      }
+      id: { [Op.in]: productIds },
+      price: { [Op.in]: productPrices }
     }
   }).then(function (result) {
-    const productDbIds = result;
-    let productCheck = productDbIds.map(b => b.id);
-    console.log('Amount of items verified in DB: ' + productCheck.length);
-    console.log('Amount of items ordered: ' + productIds.length);
+    const productDbInfo = result;
 
-    if (productIds.length !== productCheck.length) {
+    let productIdCheck = productDbInfo.map(b => b.id);
+    let productPriceCheck = productDbInfo.map(c => {
+      return parseInt(c.price)
+    });
+    let productQuantityCheck = productDbInfo.map(q => q.quantity);
+    console.log(productQuantityCheck);
+    console.log('Amount of items verified in DB: ' + productIdCheck.length);
+    console.log('Amount of items ordered: ' + productIds.length);
+    console.log(productPriceCheck);
+    console.log(productPrices);
+
+    if (productIds.length !== productIdCheck.length) {
       res.status(400).send({ message: 'Something went wrong' });
+      return;
+    }
+
+    for (var i = 0; i < productPriceCheck.length; i++) {
+      if (productPriceCheck[i] !== productPrices[i]) {
+        res.status(400).send({ message: 'Something is not right' });
+        return;
+      }
+    }
+
+    for (var i = 0; i < productQuantityCheck.length; i++) {
+      if (productQuantityCheck[i] < productQuantities[i]) {
+        res.status(400).send({ message: 'Not enough stock of product' });
+        return;
+      }
     }
   });
-
-  // Loop
-
-  // count the products, check if number or products ordered is equal to number of 
-  // products found in db
-  // if not equal, return some message. 
-
   // you loop 
-
   // check quantity and price
   // forloop where i<= product count
   // if price ordered == to price found in db -> continue 
   // if quantity ordered is <= than the one found in db -> continue
-  // else cancel order and exit 
-
-  console.log(productIds);
-
-  let newOrders = [];
-  let newProductsOrdered = [];
-  let total = 0;
+  // else cancel order and exit
 
   Order.create({
     totalPrice: totalPrice,
@@ -104,20 +115,15 @@ router.post('/checkout', async (req, res, next) => {
         OrderId: newOrder.id,
         UserId: user.id
       }).then(newProductOrdered => {
-        // newProductsOrdered.push(newProductOrdered);
-        // res.json(newProductOrdered);
       }).catch(() => {
         res.status(400).send();
       });
-
       // Update Product quantity
       Product.update({
         quantity: Sequelize.literal(`quantity - ${product.quantity}`)
       }, {
         where: { id: product.productId }
       });
-
-
     });
     // newOrders.push(newOrder);
     res.json(newOrder);
@@ -130,6 +136,7 @@ router.post('/checkout', async (req, res, next) => {
     return total + product.price * product.quantity;
   }, 0);
   console.log("TOTAL: ", totalCost);
+
 });
 
 /* GET all orders */

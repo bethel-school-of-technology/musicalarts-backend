@@ -9,10 +9,10 @@ module.exports = {
             username: user.username,
             id: user.id
         },
-        secretKey,
-        {
-            expiresIn: '1h'
-        });
+            secretKey,
+            {
+                expiresIn: '1y'
+            });
 
         return token;
     },
@@ -23,7 +23,7 @@ module.exports = {
         } catch (err) {
             return null;
         }
-        
-        
+
+
     }
 };
