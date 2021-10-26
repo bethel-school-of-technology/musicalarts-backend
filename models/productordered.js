@@ -15,10 +15,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.Order);
-      this.hasOne(models.Product, {
-        foreignKey: 'id',
-        localKey: 'productId'
-      });
+      this.belongsTo(models.User);
     }
   };
   ProductOrdered.init({
@@ -32,9 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2)
     },
     quantity: {
-      type: DataTypes.INTEGER
-    },
-    userId: {
       type: DataTypes.INTEGER
     }
   }, {
