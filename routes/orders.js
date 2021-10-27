@@ -1,5 +1,4 @@
 var express = require('express');
-// const { ARRAY } = require('sequelize/types');
 var router = express.Router();
 const { Order, Product, ProductOrdered, Sequelize } = require('../models');
 const Op = Sequelize.Op;
