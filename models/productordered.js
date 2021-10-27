@@ -27,10 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2)
     },
     quantity: {
-      type: DataTypes.INTEGER,
-      validate: {
-
-      }
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
