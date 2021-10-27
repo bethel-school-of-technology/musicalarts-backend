@@ -38,24 +38,18 @@ router.post('/checkout', async (req, res, next) => {
   }
 
   let productIds = productsOrdered.map(a => a.productId);
-  let productPrices = productsOrdered.map(p => p.price);
 
   Product.findAll({
     where: {
-      id: { [Op.in]: productIds },
-      price: { [Op.in]: productPrices }
+      id: { [Op.in]: productIds }
     }
   }).then(function (result) {
     const productDbIds = result;
 
     let productIdCheck = productDbIds.map(b => b.id);
-    let productPriceCheck = productDbIds.map(c => {
-      return parseInt(c.price)
-    });
+
     console.log('Amount of items verified in DB: ' + productIdCheck.length);
     console.log('Amount of items ordered: ' + productIds.length);
-    console.log(productPriceCheck);
-    console.log(productPrices);
 
     if (productIds.length !== productIdCheck.length) {
       res.status(400).send({ message: 'Something is not right' });
